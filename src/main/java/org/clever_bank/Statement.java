@@ -7,6 +7,7 @@ import org.clever_bank.entities.Account;
 import org.clever_bank.entities.Transaction;
 import org.clever_bank.repository.TransactionRepository;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -57,6 +58,9 @@ public class Statement {
             e.printStackTrace();
         }
 
+        if (createNewDirectory("check") == -1){
+            System.out.println("Error when creating a directory");
+        }
         stringToPdfFile (bankCheck, "check/Check");
         System.out.println(bankCheck);
         System.out.println("Чек сохранён");
@@ -70,7 +74,7 @@ public class Statement {
         List<Transaction> transactions = TransactionRepository.readTransactionsPeriod(account.getId(), dateStart, dateEnd);
         for (Transaction transaction : transactions) {
             String transactionDate = getStringDate(transaction.getDate(), 3);
-            String note = "";
+            String note;
             if (transaction.getType().getId() == 3){
                 note = getNoteIfTransactionEqualsTree(transaction, account);
             }
@@ -78,7 +82,7 @@ public class Statement {
                 note = transaction.getType().getName();
             }
 
-            String money = "";
+            String money;
             if (transaction.getType().getId() == 2){
                 money = "-" + transaction.getMoney().toString() + " " + currency;
             }
@@ -103,6 +107,10 @@ public class Statement {
         // result document statement-money
         String resultSet = accountDataSet(account, dateStart, dateEnd) + transactionLine;
 
+
+        if (createNewDirectory("statement") == -1){
+            System.out.println("Error when creating a directory");
+        }
         stringToPdfFile(resultSet,"statement/Statement");
         System.out.print(resultSet);
         System.out.println("Выписка сохранена");
@@ -124,6 +132,9 @@ public class Statement {
         // result document statement-money
         String resultSet = accountDataSet(account, dateStart, dateEnd) + moneyStatement;
 
+        if (createNewDirectory("statement-money") == -1){
+            System.out.println("Error when creating a directory");
+        }
         stringToPdfFile(resultSet,"statement-money/MoneyStatement");
         System.out.print(resultSet);
         System.out.println("Выписка сохранена");
@@ -205,5 +216,22 @@ public class Statement {
             return "Перевод средств → " + transaction.getAccountRecipient().getCustomer().getName();
         }
         return "";
+    }
+
+    private static int createNewDirectory (String path){
+        File directory = new File(path);
+
+        if (!directory.exists()) {
+            boolean created = directory.mkdirs();
+            if (created) {
+                return 1;
+            }
+            else {
+                return -1;
+            }
+        }
+        else {
+            return 0;
+        }
     }
 }

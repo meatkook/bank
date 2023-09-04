@@ -4,38 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fbc9ccea-3e9f-4123-82ed-ce222297f159" name="Changes" comment="Initialize">
-      <change afterPath="$PROJECT_DIR$/.idea/artifacts/web_clever_bank.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/clever_bank/InterestCalculator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/clever_bank/Statement.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/clever_bank/db/DatabaseSetup.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/clever_bank/entities/Account.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/clever_bank/entities/Bank.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/clever_bank/entities/Customer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/clever_bank/entities/Transaction.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/clever_bank/entities/TransactionType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/clever_bank/repository/AccountRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/clever_bank/repository/BankRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/clever_bank/repository/CustomerRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/clever_bank/repository/TransactionRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/clever_bank/repository/TransactionTypeRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/clever_bank/servlets/BankServlet.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/clever_bank/ui/UserInterface.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/clever_bank/utility_classes/AppConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/clever_bank/utility_classes/ConfigReader.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/clever_bank/utility_classes/DateConstructor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+    <list default="true" id="fbc9ccea-3e9f-4123-82ed-ce222297f159" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/clever_bank/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/clever_bank/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/clever_bank/Statement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/clever_bank/Statement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/clever_bank/db/DatabaseSetup.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/clever_bank/db/DatabaseSetup.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/clever_bank/repository/AccountRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/clever_bank/repository/AccountRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/clever_bank/repository/BankRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/clever_bank/repository/BankRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/clever_bank/repository/CustomerRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/clever_bank/repository/CustomerRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/clever_bank/repository/TransactionRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/clever_bank/repository/TransactionRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/clever_bank/repository/TransactionTypeRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/clever_bank/repository/TransactionTypeRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/clever_bank/utility_classes/AppConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/clever_bank/utility_classes/AppConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -198,6 +177,8 @@
       <workItem from="1693742227790" duration="49948000" />
       <workItem from="1693800020742" duration="792000" />
       <workItem from="1693800955058" duration="773000" />
+      <workItem from="1693802534634" duration="1113000" />
+      <workItem from="1693865797212" duration="3411000" />
     </task>
     <task id="LOCAL-00001" summary="Initialize">
       <created>1692734770765</created>
@@ -206,7 +187,15 @@
       <option name="project" value="LOCAL" />
       <updated>1692734770765</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Created Entities, repository (CRUD), user interface (3 type of statements), utility classes (AppConfig ConfigReader, DateConstructor)">
+      <option name="closed" value="true" />
+      <created>1693803163562</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1693803163562</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -225,7 +214,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initialize" />
-    <option name="LAST_COMMIT_MESSAGE" value="Initialize" />
+    <MESSAGE value="Created Entities, repository (CRUD), user interface (3 type of statements), utility classes (AppConfig ConfigReader, DateConstructor)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Created Entities, repository (CRUD), user interface (3 type of statements), utility classes (AppConfig ConfigReader, DateConstructor)" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -234,15 +224,6 @@
           <properties class="org.postgresql.util.PSQLException" package="org.postgresql.util" />
           <option name="timeStamp" value="21" />
         </breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/src/main/java/org/clever_bank/repository/CustomerRepository.java</url>
-          <line>20</line>
-          <properties class="org.clever_bank.repository.CustomerRepository" method="createCustomer">
-            <option name="EMULATED" value="true" />
-            <option name="WATCH_EXIT" value="false" />
-          </properties>
-          <option name="timeStamp" value="29" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/clever_bank/repository/AccountRepository.java</url>
           <line>71</line>

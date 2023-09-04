@@ -14,7 +14,7 @@ import java.util.List;
 
 public class CustomerRepository {
     private static final AppConfig appConfig = new AppConfig();
-    private static final String url = appConfig.getUrl();
+    private static final String url = appConfig.getFullUrl();
     private static final String username = appConfig.getUsername();
     private static final String password = appConfig.getPassword();
 

@@ -6,8 +6,10 @@ import java.util.Properties;
 
 public class AppConfig {
     private String url;
+    private String fullUrl;
     private String username;
     private String password;
+    private String dbName;
 
     public AppConfig() {
         try {
@@ -16,6 +18,8 @@ public class AppConfig {
             properties.load(fileInputStream);
 
             this.url = properties.getProperty("url");
+            this.fullUrl = properties.getProperty("full_url");
+            this.dbName = properties.getProperty("dbName");
             this.username = properties.getProperty("username");
             this.password = properties.getProperty("password");
 
@@ -27,6 +31,13 @@ public class AppConfig {
 
     public String getUrl() {
         return url;
+    }
+    public String getFullUrl() {
+        return fullUrl;
+    }
+
+    public String getDbName(){
+        return  dbName;
     }
 
     public String getUsername() {

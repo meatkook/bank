@@ -15,7 +15,7 @@ import java.util.Date;
 
 public class TransactionRepository {
     private static final AppConfig appConfig = new AppConfig();
-    private static final String url = appConfig.getUrl();
+    private static final String url = appConfig.getFullUrl();
     private static final String username = appConfig.getUsername();
     private static final String password = appConfig.getPassword();
 
@@ -134,9 +134,6 @@ public class TransactionRepository {
         return null;
     }
 
-    /***
-     * TO DO
-     * */
     public static BigDecimal getReceivedForAccount (int accountId, Instant dateStart, Instant dateEnd) {
         String sqlQuery = "SELECT SUM(money) AS total_income " +
                 "FROM transactions " +

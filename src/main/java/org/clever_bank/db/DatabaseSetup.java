@@ -1,5 +1,7 @@
 package org.clever_bank.db;
 
+import org.clever_bank.utility_classes.AppConfig;
+
 import java.nio.charset.Charset;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -7,12 +9,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DatabaseSetup {
+    private static final AppConfig appConfig = new AppConfig();
+    private static final String url = appConfig.getUrl();
+    private static final String fullUrl = appConfig.getFullUrl();
+    private static final String dbName = appConfig.getDbName();
+    private static final String username = appConfig.getUsername();
+    private static final String password = appConfig.getPassword();
     public static void setupDatabase() {
-        String url = "jdbc:postgresql://localhost:5432/";
-        String dbName = "clever_bank";
-        String username = "postgres";
-        String password = "root_password";
-        String currentCharset = Charset.defaultCharset().name();
 
         try (Connection connection = DriverManager.getConnection(url, username, password);
             Statement statement = connection.createStatement()){
@@ -21,12 +24,10 @@ public class DatabaseSetup {
             System.out.printf("DB %s is created", dbName);
         }
         catch (SQLException e){
-            System.out.printf("DB %s already exist",  dbName);
+            System.out.println(dbName);
         }
 
-        url = url + dbName;
-
-        try (Connection connection = DriverManager.getConnection(url, username, password);
+        try (Connection connection = DriverManager.getConnection(fullUrl, username, password);
              Statement statement = connection.createStatement()) {
 
             // Создание таблицы banks
