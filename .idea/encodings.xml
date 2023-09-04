@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding" defaultCharsetForPropertiesFiles="UTF-8">
+    <file url="file://$PROJECT_DIR$/src/main/java/org/clever_bank/Main.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/org/clever_bank/Statement.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/org/clever_bank/db/DatabaseSetup.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/org/clever_bank/entities/Account.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/org/clever_bank/entities/Customer.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/org/clever_bank/entities/Transaction.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/org/clever_bank/operations/Report.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/org/clever_bank/repository/AccountRepository.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/org/clever_bank/repository/BankRepository.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/org/clever_bank/repository/CustomerRepository.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/org/clever_bank/repository/TransactionRepository.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/org/clever_bank/utility_classes/ConfigReader.java" charset="UTF-8" />
+    <file url="PROJECT" charset="UTF-8" />
+  </component>
+</project>
