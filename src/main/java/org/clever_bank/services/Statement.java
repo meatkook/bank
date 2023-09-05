@@ -1,4 +1,4 @@
-package org.clever_bank;
+package org.clever_bank.services;
 
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;

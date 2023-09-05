@@ -1,4 +1,4 @@
-package org.clever_bank;
+package org.clever_bank.services;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;

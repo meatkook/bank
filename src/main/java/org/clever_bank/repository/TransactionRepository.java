@@ -1,11 +1,9 @@
 package org.clever_bank.repository;
 
 import org.clever_bank.entities.*;
-import org.clever_bank.utility_classes.AppConfig;
+import org.clever_bank.services.AppConfig;
 
-import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
-import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.time.Instant;
 import java.time.ZoneId;

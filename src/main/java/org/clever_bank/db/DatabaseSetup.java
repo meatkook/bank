@@ -1,8 +1,7 @@
 package org.clever_bank.db;
 
-import org.clever_bank.utility_classes.AppConfig;
+import org.clever_bank.services.AppConfig;
 
-import java.nio.charset.Charset;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;

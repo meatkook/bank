@@ -22,6 +22,14 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
 }
 
+tasks.jar {
+    manifest {
+        attributes["Main-Class"] = "org.clever_bank.Main"
+    }
+    from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
+}
+
+
 tasks.test {
     useJUnitPlatform()
 }

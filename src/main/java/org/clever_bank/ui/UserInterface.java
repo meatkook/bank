@@ -1,7 +1,7 @@
 package org.clever_bank.ui;
 
-import org.clever_bank.utility_classes.DateConstructor;
-import org.clever_bank.Statement;
+import org.clever_bank.services.DateConstructor;
+import org.clever_bank.services.Statement;
 import org.clever_bank.entities.Account;
 import org.clever_bank.entities.Transaction;
 import org.clever_bank.repository.AccountRepository;
@@ -13,17 +13,33 @@ import java.util.Objects;
 import java.util.Scanner;
 
 public class UserInterface {
+    private static Account account = null;
     public static void start () {
-        Scanner in = new Scanner(System.in);
-        System.out.println("\nПожалуйста введите свой номер банковского счёта:");
-        String choice = in.nextLine();
-        Account account = AccountRepository.read(choice);
-        if (account == null){
-            System.out.println("Такого номера не существует");
-            return;
+        boolean isWorking = true;
+        while (isWorking){
+            isWorking = accountTransactionMenu();
+        }
+    }
+
+    public static boolean accountTransactionMenu(){
+        boolean isWorking = true;
+        String inputData = "";
+        if (account == null) {
+            System.out.println("\nПожалуйста введите свой номер банковского счёта или напишите stop:");
+            inputData = checkInputData();
+            account = AccountRepository.read(inputData);
         }
 
-        System.out.println("\nЗдравствуйте " + account.getCustomer().getName() + " (" + account.getBank().getName() + ")");
+        if (inputData.equals("stop")){
+            return false;
+        }
+
+        if (account == null){
+            System.out.println("Такого номера не существует");
+            return true;
+        }
+
+        System.out.println("\n" + account.getCustomer().getName() + " (" + account.getBank().getName() + ")");
         System.out.println("Баланс: " + account.getBalance() + " " + account.getCurrency());
         System.out.println("Какую операцию желаете совершить?");
         System.out.println("1. Пополнить счёта");
@@ -31,24 +47,36 @@ public class UserInterface {
         System.out.println("3. Перевести деньги на другой счёт");
         System.out.println("4. Выписка по счёту");
         System.out.println("5. Получить количество потраченных и полученных средств за определенный период времени");
-        choice = in.next();
-        switch (choice) {
-            case "1" -> deposit(account);
-            case "2" -> subtraction(account);
-            case "3" -> transferMoney(account);
-            case "4" -> statement(account);
-            case "5" -> statementMoney(account);
+        System.out.println("6. Перейти к другому счёту");
+        System.out.println("7. Остановить приложение");
+        inputData = checkInputData();
+        switch (inputData) {
+            case "1" -> depositMenu();
+            case "2" -> subtractionMenu();
+            case "3" -> transferMoneyMenu();
+            case "4" -> statement();
+            case "5" -> statementMoney();
+            case "6" -> { account = null; return true; }
+            case "7" -> isWorking = false;
             default -> System.out.println("Выбранного варианта меню не существует");
         }
+        return isWorking;
     }
 
-    private static void statementMoney(Account account) {
+    private static String statementMenu () {
+        System.out.println("1. Создать выписку за последний месяц");
+        System.out.println("2. Создать выписку за последний год");
+        System.out.println("3. Создать выписку за всё время");
+        return checkInputData();
+    }
+
+    private static void statementMoney() {
         Instant accountOpenDate = DateConstructor.createInstantDate(account.getOpeningDate());
         Instant currentDate = Instant.now();
-        Instant oneMonthAgo = getMonthAgo(account);
-        Instant oneYearAgo = getYearAgo(account);
+        Instant oneMonthAgo = getMonthAgo();
+        Instant oneYearAgo = getYearAgo();
 
-        String choice = statementMenu(account);
+        String choice = statementMenu();
         switch (choice) {
             case "1" -> Statement.createMoneyReport(account, oneMonthAgo, currentDate);
             case "2" -> Statement.createMoneyReport(account, oneYearAgo, currentDate);
@@ -56,21 +84,21 @@ public class UserInterface {
         }
     }
 
-    private static void statement(Account account){
+    private static void statement(){
         Instant accountOpenDate = DateConstructor.createInstantDate(account.getOpeningDate());
         Instant currentDate = Instant.now();
-        Instant oneMonthAgo = getMonthAgo(account);
-        Instant oneYearAgo = getYearAgo(account);
+        Instant oneMonthAgo = getMonthAgo();
+        Instant oneYearAgo = getYearAgo();
 
-        String choice = statementMenu(account);
-        switch (choice) {
+        String inputDataFromMenu = statementMenu();
+        switch (inputDataFromMenu) {
             case "1" -> Statement.createReport(account, oneMonthAgo, currentDate);
             case "2" -> Statement.createReport(account, oneYearAgo, currentDate);
             default -> Statement.createReport(account, accountOpenDate, currentDate);
         }
     }
 
-    private static Instant getMonthAgo (Account account) {
+    private static Instant getMonthAgo () {
         Instant accountOpenDate = DateConstructor.createInstantDate(account.getOpeningDate());
         Instant oneMonthAgo = DateConstructor.getPreviousMonthInstant();
 
@@ -80,7 +108,7 @@ public class UserInterface {
         return oneMonthAgo;
     }
 
-    private static Instant getYearAgo (Account account) {
+    private static Instant getYearAgo () {
         Instant accountOpenDate = DateConstructor.createInstantDate(account.getOpeningDate());
         Instant oneYearAgo = DateConstructor.getPreviousYearInstant();
 
@@ -91,30 +119,13 @@ public class UserInterface {
         return oneYearAgo;
     }
 
-    private static String statementMenu (Account account) {
-        Scanner in = new Scanner(System.in);
-        Instant accountOpenDate = DateConstructor.createInstantDate(account.getOpeningDate());
-        Instant currentDate = Instant.now();
-        Instant oneMonthAgo = DateConstructor.getPreviousMonthInstant();
-        Instant oneYearAgo = DateConstructor.getPreviousYearInstant();
-
-        if (oneMonthAgo.isBefore(accountOpenDate)){
-            oneMonthAgo = accountOpenDate;
-        }
-
-        if (oneYearAgo.isBefore(accountOpenDate)){
-            oneYearAgo = accountOpenDate;
-        }
-
-        System.out.println("1. Создать выписку за последний месяц");
-        System.out.println("2. Создать выписку за последний год");
-        System.out.println("3. Создать выписку за всё время");
-        return in.nextLine();
-    }
-
-    private static void deposit (Account account) {
+    private static void depositMenu() {
         System.out.println("\nВведите сумму для пополнения счёта");
-        BigDecimal money = getMoney();
+        BigDecimal money = getMoneyData();
+        if (money == null) {
+            return;
+        }
+
         Transaction transaction = new Transaction();
         transaction.setMoney(money);
         transaction.setAccountSender(account);
@@ -127,14 +138,9 @@ public class UserInterface {
         Statement.createTransactionCheck(Objects.requireNonNull(TransactionRepository.readTransaction(transactionId)));
     }
 
-    private static void subtraction (Account account) {
+    private static void subtractionMenu() {
         System.out.println("\nВведите для снятия средств со счёта");
-        BigDecimal money = getMoney();
-
-        if (money == null) {
-            return;
-        }
-
+        BigDecimal money = getMoneyData();
         Transaction transaction = new Transaction();
         transaction.setMoney(money);
         transaction.setAccountSender(account);
@@ -148,14 +154,13 @@ public class UserInterface {
         Statement.createTransactionCheck(Objects.requireNonNull(TransactionRepository.readTransaction(transactionId)));
     }
 
-    private static void transferMoney (Account account) {
-        Scanner in = new Scanner(System.in);
+    private static void transferMoneyMenu() {
         Transaction transaction = new Transaction();
         transaction.setAccountSender(account);
         transaction.setType(TransactionTypeRepository.readTransactionTypeById(3));
         System.out.println("\nВведите номер счёта получателя:");
-        String choice = in.nextLine();
-        Account accountRecipient = AccountRepository.read(choice);
+        String inputData = checkInputData();
+        Account accountRecipient = AccountRepository.read(inputData);
         if (accountRecipient == null) {
             System.out.println("Такого номера счёта не существует");
             return;
@@ -172,8 +177,7 @@ public class UserInterface {
             return;
         }
         System.out.println("Введите сумму");
-        choice = in.next();
-        BigDecimal money = new BigDecimal(choice);
+        BigDecimal money = getMoneyData();
         transaction.setMoney(money);
 
         int transactionId = TransactionRepository.create(transaction);
@@ -182,14 +186,28 @@ public class UserInterface {
         Statement.createTransactionCheck(Objects.requireNonNull(TransactionRepository.readTransaction(transactionId)));
     }
 
-    private static BigDecimal getMoney (){
-        Scanner in = new Scanner(System.in);
-        String choice = in.next();
-        BigDecimal money = new BigDecimal(choice);
-        if (money.compareTo(BigDecimal.valueOf(0)) <= 0) {
-            System.out.println("Сумма должна быть больше 0");
-            return null;
+    private static BigDecimal getMoneyData(){
+        try {
+            String inputData = checkInputData();
+            BigDecimal money = new BigDecimal(inputData);
+            if (money.compareTo(BigDecimal.valueOf(0)) <= 0) {
+                System.out.println("Сумма должна быть больше 0");
+                return null;
+            }
+            return money;
+        } catch (NumberFormatException e) {
+            System.out.println("Неверный формат ввода. Пожалуйста, введите число.");
         }
-        return money;
+        return null;
+    }
+
+    private static String checkInputData () {
+        Scanner in = new Scanner(System.in);
+        if (in.hasNextLine()) {
+            return in.nextLine();
+        } else {
+            System.out.println("Отсутствует ввод данных.");
+        }
+        return "";
     }
 }

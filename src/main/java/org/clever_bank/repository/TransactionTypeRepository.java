@@ -1,7 +1,7 @@
 package org.clever_bank.repository;
 
 import org.clever_bank.entities.TransactionType;
-import org.clever_bank.utility_classes.AppConfig;
+import org.clever_bank.services.AppConfig;
 
 import java.sql.*;
 import java.util.ArrayList;

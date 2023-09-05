@@ -1,4 +1,4 @@
-package org.clever_bank.utility_classes;
+package org.clever_bank.services;
 import org.yaml.snakeyaml.Yaml;
 import java.io.InputStream;
 

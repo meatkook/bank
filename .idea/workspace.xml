@@ -1,19 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="clevertec.main:jar" />
+    </artifacts-to-build>
+  </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fbc9ccea-3e9f-4123-82ed-ce222297f159" name="Changes" comment="">
+    <list default="true" id="fbc9ccea-3e9f-4123-82ed-ce222297f159" name="Changes" comment="Fixed Dockerfile, docker-compose.yml, build.gradle.kts, UserInterface">
+      <change beforePath="$PROJECT_DIR$/.idea/artifacts/web_clever_bank.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/clever_bank/Statement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/clever_bank/Statement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle.kts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/clever_bank/InterestCalculator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/clever_bank/services/InterestCalculator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/clever_bank/Statement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/clever_bank/services/Statement.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/clever_bank/db/DatabaseSetup.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/clever_bank/db/DatabaseSetup.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/clever_bank/entities/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/clever_bank/entities/Account.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/clever_bank/repository/AccountRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/clever_bank/repository/AccountRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/clever_bank/repository/BankRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/clever_bank/repository/BankRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/clever_bank/repository/CustomerRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/clever_bank/repository/CustomerRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/clever_bank/repository/TransactionRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/clever_bank/repository/TransactionRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/clever_bank/repository/TransactionTypeRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/clever_bank/repository/TransactionTypeRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/clever_bank/utility_classes/AppConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/clever_bank/utility_classes/AppConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/clever_bank/ui/UserInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/clever_bank/ui/UserInterface.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/clever_bank/utility_classes/AppConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/clever_bank/services/AppConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/clever_bank/utility_classes/ConfigReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/clever_bank/services/ConfigReader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/clever_bank/utility_classes/DateConstructor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/clever_bank/services/DateConstructor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -34,12 +49,7 @@
         </task>
         <projects_view>
           <tree_state>
-            <expand>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="clevertec" type="f1a62948:ProjectNode" />
-              </path>
-            </expand>
+            <expand />
             <select />
           </tree_state>
         </projects_view>
@@ -71,54 +81,56 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
-    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
-    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
-    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;extract.method.default.visibility&quot;: &quot;private&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/WorkSpace/work_projects/clevertec&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Problems&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.31264368&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;File.Encoding&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Downloaded.Files.Path.Enabled": "false",
+    "Repository.Attach.Annotations": "false",
+    "Repository.Attach.JavaDocs": "false",
+    "Repository.Attach.Sources": "false",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "deletionFromPopupRequiresConfirmation": "false",
+    "extract.method.default.visibility": "private",
+    "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "D:/WorkSpace/work_projects/clevertec",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Artifacts",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.38780487",
+    "settings.editor.selected.configurable": "configurable.group.build",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;cassandra&quot;,
-      &quot;postgresql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "cassandra",
+      "postgresql"
     ],
-    &quot;com.intellij.ide.scratch.LRUPopupBuilder$1/SQL Dialect&quot;: [
-      &quot;PostgreSQL&quot;
+    "com.intellij.ide.scratch.LRUPopupBuilder$1/SQL Dialect": [
+      "PostgreSQL"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="org.clever_bank.services" />
       <recent name="org.clever_bank" />
       <recent name="org.clever_bank.utility_classes" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Gradle.clevertec [jar]">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.clever_bank.Main" />
       <module name="clevertec.main" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="org.clever_bank.*" />
+          <option name="PATTERN" value="org.clever_bank.services.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -139,8 +151,54 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="clevertec [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="build" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>false</ForceTestExec>
+      <method v="2" />
+    </configuration>
+    <configuration name="clevertec [jar]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="jar" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>false</ForceTestExec>
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.clevertec [jar]" />
+        <item itemvalue="Gradle.clevertec [build]" />
         <item itemvalue="Application.Main" />
       </list>
     </recent_temporary>
@@ -178,7 +236,10 @@
       <workItem from="1693800020742" duration="792000" />
       <workItem from="1693800955058" duration="773000" />
       <workItem from="1693802534634" duration="1113000" />
-      <workItem from="1693865797212" duration="3411000" />
+      <workItem from="1693865797212" duration="3728000" />
+      <workItem from="1693869758705" duration="368000" />
+      <workItem from="1693909366160" duration="2754000" />
+      <workItem from="1693915313189" duration="28402000" />
     </task>
     <task id="LOCAL-00001" summary="Initialize">
       <created>1692734770765</created>
@@ -195,7 +256,15 @@
       <option name="project" value="LOCAL" />
       <updated>1693803163562</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Fixed an error when creating a statements if there is no folder for it. Changed AppConfig class">
+      <option name="closed" value="true" />
+      <created>1693869523167</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1693869523167</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -215,7 +284,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initialize" />
     <MESSAGE value="Created Entities, repository (CRUD), user interface (3 type of statements), utility classes (AppConfig ConfigReader, DateConstructor)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Created Entities, repository (CRUD), user interface (3 type of statements), utility classes (AppConfig ConfigReader, DateConstructor)" />
+    <MESSAGE value="Fixed an error when creating a statements if there is no folder for it. Changed AppConfig class" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed an error when creating a statements if there is no folder for it. Changed AppConfig class" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -226,7 +296,7 @@
         </breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/clever_bank/repository/AccountRepository.java</url>
-          <line>71</line>
+          <line>68</line>
           <option name="timeStamp" value="54" />
         </line-breakpoint>
       </breakpoints>

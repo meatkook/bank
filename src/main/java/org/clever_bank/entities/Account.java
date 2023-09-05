@@ -1,15 +1,13 @@
 package org.clever_bank.entities;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 //@Setter(AccessLevel.NONE)
 public class Account {
     private int id;

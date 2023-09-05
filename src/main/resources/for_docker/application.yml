@@ -1,0 +1,5 @@
+full_url: jdbc:postgresql://db:5432/clever_bank
+url: jdbc:postgresql://db:5432/
+username: postgres
+password: root_password
+dbName: clever_bank

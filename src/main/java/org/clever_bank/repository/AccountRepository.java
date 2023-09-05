@@ -3,14 +3,11 @@ package org.clever_bank.repository;
 import org.clever_bank.entities.Account;
 import org.clever_bank.entities.Bank;
 import org.clever_bank.entities.Customer;
-import org.clever_bank.utility_classes.AppConfig;
-import org.clever_bank.utility_classes.DateConstructor;
+import org.clever_bank.services.AppConfig;
+import org.clever_bank.services.DateConstructor;
 
-import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
-import java.nio.charset.StandardCharsets;
 import java.sql.*;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
