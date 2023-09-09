@@ -11,11 +11,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CustomerRepository {
+    /**
+     * Application configuration.
+     * This class reads the configuration from the 'application.yml' file located in the resources' directory.
+     */
     private static final AppConfig appConfig = new AppConfig();
+
+    /**
+     * URL for connecting to the database.
+     */
     private static final String url = appConfig.getFullUrl();
+
+    /**
+     * Username for connecting to the database.
+     */
     private static final String username = appConfig.getUsername();
+
+    /**
+     * Username for connecting to the database.
+     */
     private static final String password = appConfig.getPassword();
 
+    /**
+     * Creates a new customer in the database.
+     *
+     * @param customer is the customer entity to be created in DB.
+     */
     public static void createCustomer (Customer customer) {
         try (Connection connection = DriverManager.getConnection(url, username, password);
              PreparedStatement statement = connection.prepareStatement("INSERT INTO customers (name) values (?)")) {
@@ -27,6 +48,11 @@ public class CustomerRepository {
         }
     }
 
+    /**
+     * Retrieves all customers from the database.
+     *
+     * @return A list of Customer entities representing all customers in the database.
+     */
     public static List<Customer> getAllCustomers () {
         List<Customer> customerDTOList = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(url, username, password);
@@ -46,6 +72,12 @@ public class CustomerRepository {
         return customerDTOList;
     }
 
+    /**
+     * Retrieves a customer from the database based on the specified ID.
+     *
+     * @param id The ID of the customer to retrieve.
+     * @return The Customer entity representing the customer with the specified ID, or null if not found.
+     */
     public static Customer getCustomerById (int id) {
         Customer customer = null;
         try (Connection connection = DriverManager.getConnection(url, username, password);
@@ -80,6 +112,11 @@ public class CustomerRepository {
         return customer;
     }
 
+    /**
+     * Updates a customer in the database.
+     *
+     * @param customer The customer entity to be updated.
+     */
     public static void updateCustomer (Customer customer) {
         try (Connection connection = DriverManager.getConnection(url, username, password);
              PreparedStatement statement = connection.prepareStatement("UPDATE customers SET name = ? WHERE id = ?")) {
@@ -90,27 +127,15 @@ public class CustomerRepository {
             throw new RuntimeException(e);
         }
         for (Account account : customer.getAccounts()) {
-            String sqlQuery = "UPDATE accounts SET number = ?, balance = ?, currency = ?, open_date = ?, " +
-                    "id_bank = ? WHERE id = ?";
-
-            try (Connection connection = DriverManager.getConnection(url, username, password);
-                 PreparedStatement statement = connection.prepareStatement(sqlQuery)) {
-
-                statement.setString(1, account.getAccountNumber());
-                statement.setBigDecimal(2, account.getBalance());
-                statement.setString(3, account.getCurrency());
-                statement.setDate(4, new java.sql.Date(account.getOpeningDate().getTime()));
-                statement.setInt(5, account.getBank().getId());
-                statement.setInt(6, account.getId());
-
-                statement.executeUpdate();
-            }
-            catch (SQLException e) {
-                e.printStackTrace();
-            }
+            AccountRepository.update(account);
         }
     }
 
+    /**
+     * Deletes a customer from the database.
+     *
+     * @param customer The customer entity to be deleted.
+     */
     public static void deleteCustomer (Customer customer) {
         try (Connection connection = DriverManager.getConnection(url, username, password);
              PreparedStatement statement = connection.prepareStatement("DELETE FROM customers WHERE id = ?")) {
@@ -122,6 +147,13 @@ public class CustomerRepository {
         }
     }
 
+    /**
+     * Retrieves a list of accounts associated with a customer ID from the database.
+     *
+     * @param customerId The ID of the customer.
+     * @return A list of Account entities associated with the customer ID.
+     * @throws SQLException If an SQL exception occurs.
+     */
     private static List<Account> getAccountsByCustomerId (int customerId) throws SQLException {
         String selectQuery = "SELECT * FROM accounts WHERE id_customer = ?";
         try (Connection connection = DriverManager.getConnection(url, username, password);
@@ -144,6 +176,12 @@ public class CustomerRepository {
         }
     }
 
+    /**
+     * Retrieves a bank based on the specified bank ID from the database.
+     *
+     * @param customerId The ID of the bank.
+     * @return The Bank entity with empty list of accounts representing the bank with the specified ID, or null if not found.
+     */
     private static Bank getBankByBankId (int customerId) {
         String sqlQuery = "SELECT * FROM banks WHERE id = ?";
         try (Connection connection = DriverManager.getConnection(url, username, password);
@@ -154,7 +192,7 @@ public class CustomerRepository {
             if (resultSet.next()){
                 int id = resultSet.getInt("id");
                 String name = resultSet.getString("name");
-                return new Bank(id, name, new ArrayList<Account>());
+                return new Bank(id, name, new ArrayList<>());
             }
         }
         catch (SQLException e) {

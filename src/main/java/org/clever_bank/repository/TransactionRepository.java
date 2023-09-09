@@ -6,17 +6,37 @@ import org.clever_bank.services.AppConfig;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.Date;
 
 public class TransactionRepository {
+    /**
+     * Application configuration.
+     * This class reads the configuration from the 'application.yml' file located in the resources' directory.
+     */
     private static final AppConfig appConfig = new AppConfig();
+
+    /**
+     * URL for connecting to the database.
+     */
     private static final String url = appConfig.getFullUrl();
+
+    /**
+     * Username for connecting to the database.
+     */
     private static final String username = appConfig.getUsername();
+
+    /**
+     * Username for connecting to the database.
+     */
     private static final String password = appConfig.getPassword();
 
+    /**
+     * Creates a new transaction in the database.
+     *
+     * @param transaction The transaction entity to be created.
+     * @return The ID of the created transaction.
+     */
     public static int create (Transaction transaction) {
         String sqlQuery = "INSERT INTO transactions (date, money, id_type ,id_sender, id_recipient) " +
                 "VALUES (?, ?, ?, ?, ?)" +
@@ -24,7 +44,6 @@ public class TransactionRepository {
         try (Connection connection = DriverManager.getConnection(url, username, password);
              PreparedStatement statement = connection.prepareStatement(sqlQuery)) {
 
-            ZonedDateTime currentDateTime = ZonedDateTime.now(ZoneId.systemDefault());
             statement.setTimestamp(1, Timestamp.from(Instant.now()));
             statement.setBigDecimal(2, transaction.getMoney());
             statement.setInt(3, transaction.getType().getId());
@@ -36,16 +55,20 @@ public class TransactionRepository {
 
 
             if (transaction.getType().getId() == 1) {
+                assert accountRecipient != null;
                 accountRecipient.setBalance(accountRecipient.getBalance().add(transaction.getMoney()));
                 AccountRepository.update(accountRecipient);
             }
 
             if (transaction.getType().getId() == 2) {
+                assert accountRecipient != null;
                 accountRecipient.setBalance(accountRecipient.getBalance().subtract(transaction.getMoney()));
                 AccountRepository.update(accountRecipient);
             }
             if (transaction.getType().getId() == 3) {
+                assert accountSender != null;
                 accountSender.setBalance(accountSender.getBalance().subtract(transaction.getMoney()));
+                assert accountRecipient != null;
                 accountRecipient.setBalance(accountRecipient.getBalance().add(transaction.getMoney()));
                 AccountRepository.update(accountSender);
                 AccountRepository.update(accountRecipient);
@@ -63,41 +86,12 @@ public class TransactionRepository {
         return 0;
     }
 
-    public static List<Transaction> readTransactions() {
-        String sqlQuery = "SELECT t.id, t.date, t.money, t.id_type, t.id_sender, t.id_recipient, ty.name " +
-                "FROM transactions t " +
-                "JOIN types ty ON t.id_type = ty.id";
-        List<Transaction> transactions = new ArrayList<>();
-
-        try (Connection connection = DriverManager.getConnection(url, username, password);
-             Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery (sqlQuery)) {
-
-            while (resultSet.next()) {
-                // Получение данных о транзакции из результата запроса
-                int id = resultSet.getInt("id");
-                Instant date = resultSet.getTimestamp("date").toInstant();
-                BigDecimal money = resultSet.getBigDecimal("money");
-                int typeId = resultSet.getInt("id_type");
-                int senderId = resultSet.getInt("id_sender");
-                int recipientId = resultSet.getInt("id_recipient");
-                String typeName = resultSet.getString("name");
-
-                // Получение аккаунта отправителя и получателя
-                Account accountSender = getAccountById(senderId);
-                Account accountRecipient = getAccountById(recipientId);
-                TransactionType type = new TransactionType(typeId, typeName);
-
-                Transaction transaction = new Transaction(id, type, date, accountSender, accountRecipient, money);
-                transactions.add(transaction);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return transactions;
-    }
-
+    /**
+     * Reads a transaction from the database based on its ID.
+     *
+     * @param id The ID of the transaction to be read.
+     * @return The transaction with the specified ID, or null if not found.
+     */
     public static Transaction readTransaction (int id) {
 
         String sqlQuery = "SELECT t.id, t.date, t.money, t.id_type, t.id_sender, t.id_recipient, ty.name " +
@@ -107,23 +101,12 @@ public class TransactionRepository {
 
         try (Connection connection = DriverManager.getConnection(url, username, password);
              PreparedStatement statement = connection.prepareStatement(sqlQuery)) {
+
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
+
             if (resultSet.next()) {
-                // Получение данных о транзакции из результата запроса
-                Instant date = resultSet.getTimestamp("date").toInstant();
-                BigDecimal money = resultSet.getBigDecimal("money");
-                int typeId = resultSet.getInt("id_type");
-                int senderId = resultSet.getInt("id_sender");
-                int recipientId = resultSet.getInt("id_recipient");
-                String typeName = resultSet.getString("name");
-
-                // Получение аккаунта отправителя и получателя
-                Account accountSender = getAccountById(senderId);
-                Account accountRecipient = getAccountById(recipientId);
-                TransactionType type = new TransactionType(typeId, typeName);
-
-                return new Transaction(id, type, date, accountSender, accountRecipient, money);
+                return getTransactionFromResultSet(resultSet);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -132,59 +115,15 @@ public class TransactionRepository {
         return null;
     }
 
-    public static BigDecimal getReceivedForAccount (int accountId, Instant dateStart, Instant dateEnd) {
-        String sqlQuery = "SELECT SUM(money) AS total_income " +
-                "FROM transactions " +
-                "WHERE (id_type = 1 OR (id_type = 3 AND id_recipient = ?)) " +
-                "AND id_recipient = ? " +
-                "AND date BETWEEN ? AND ?";
-
-        BigDecimal totalIncome = null;
-
-        try (Connection connection = DriverManager.getConnection(url, username, password);
-             PreparedStatement statement = connection.prepareStatement(sqlQuery)) {
-            statement.setInt(1, accountId);
-            statement.setInt(2, accountId);
-            statement.setTimestamp(3, Timestamp.from(dateStart));
-            statement.setTimestamp(4, Timestamp.from(dateEnd));
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                totalIncome = resultSet.getBigDecimal("total_income");
-            }
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return totalIncome;
-    }
-
-    public static BigDecimal getWithdrawnForAccount (int accountId, Instant dateStart, Instant dateEnd) {
-        String sqlQuery = "SELECT SUM(money) AS total_expense " +
-                "FROM transactions " +
-                "WHERE (id_type = 2 OR (id_type = 3 AND id_sender = ?)) " +
-                "AND id_sender = ? " +
-                "AND date BETWEEN ? AND ?";
-
-        BigDecimal totalExpense = null;
-
-        try (Connection connection = DriverManager.getConnection(url, username, password);
-             PreparedStatement statement = connection.prepareStatement(sqlQuery)) {
-            statement.setInt(1, accountId);
-            statement.setInt(2, accountId);
-            statement.setTimestamp(3, Timestamp.from(dateStart));
-            statement.setTimestamp(4, Timestamp.from(dateEnd));
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                totalExpense = resultSet.getBigDecimal("total_expense");
-            }
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return totalExpense;
-    }
-
-    public static List<Transaction> readTransactionsPeriod(int accountId, Instant dateStart, Instant dateEnd) { /*, Date dateStart, Date dateEnd*/
+    /**
+     * Reads all transactions within a specified period for a given account.
+     *
+     * @param accountId  The ID of the account.
+     * @param dateStart  The start date of the period.
+     * @param dateEnd    The end date of the period.
+     * @return A list of transactions within the specified period for the given account.
+     */
+    public static List<Transaction> readPeriodTransactionsOfAccount (int accountId, Instant dateStart, Instant dateEnd) {
         List<Transaction> transactions = new ArrayList<>();
         String query = "SELECT transact.id, " + //  1
                 "transact.id_type, " +          //  2
@@ -298,66 +237,128 @@ public class TransactionRepository {
         return transactions;
     }
 
-    private static Account getAccountById (int accountId) {
-        Account account = null;
-        String sqlQuery = "SELECT * FROM accounts WHERE id = ?";
+    /**
+     * Reads all transactions from the database.
+     *
+     * @return A list of all transactions in the database.
+     */
+    public static List<Transaction> readAllTransactions () {
+        String sqlQuery = "SELECT t.id, t.date, t.money, t.id_type, t.id_sender, t.id_recipient, ty.name " +
+                "FROM transactions t " +
+                "JOIN types ty ON t.id_type = ty.id";
+        List<Transaction> transactions = new ArrayList<>();
+
+        try (Connection connection = DriverManager.getConnection(url, username, password);
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery (sqlQuery)) {
+
+            while (resultSet.next()) {
+                Transaction transaction = getTransactionFromResultSet(resultSet);
+                transactions.add(transaction);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return transactions;
+    }
+
+    /**
+     * Calculates the total received money for a given account within a specified period.
+     *
+     * @param accountId  The ID of the account.
+     * @param dateStart  The start date of the period.
+     * @param dateEnd    The end date of the period.
+     * @return The total received money for the account within the specified period.
+     */
+    public static BigDecimal getReceivedMoneyForAccount (int accountId, Instant dateStart, Instant dateEnd) {
+        String sqlQuery = "SELECT SUM(money) AS total_income " +
+                "FROM transactions " +
+                "WHERE (id_type = 1 OR (id_type = 3 AND id_recipient = ?)) " +
+                "AND id_recipient = ? " +
+                "AND date BETWEEN ? AND ?";
+
+        BigDecimal totalIncome = null;
+
         try (Connection connection = DriverManager.getConnection(url, username, password);
              PreparedStatement statement = connection.prepareStatement(sqlQuery)) {
             statement.setInt(1, accountId);
+            statement.setInt(2, accountId);
+            statement.setTimestamp(3, Timestamp.from(dateStart));
+            statement.setTimestamp(4, Timestamp.from(dateEnd));
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                String number = resultSet.getString ("number");
-                BigDecimal balance = resultSet.getBigDecimal("balance");
-                String currency = resultSet.getString("currency");
-                Date open_date = resultSet.getDate("open_date");
-                int bankId = resultSet.getInt("id_bank");
-                Bank bank = getBankById(bankId);
-                int customerId = resultSet.getInt("id_customer");
-                Customer customer = getCustomerById(customerId);
-                account = new Account(id, number, balance, currency, open_date, bank, customer);
+                totalIncome = resultSet.getBigDecimal("total_income");
             }
-
         }
         catch (SQLException e) {
             e.printStackTrace();
         }
-
-        return account;
+        return totalIncome;
     }
 
-    private static Bank getBankById(int bankId) {
-        Bank bank = null;
-        String sqlQuery = "SELECT * FROM banks WHERE id = ?";
+    /**
+     * Calculates the total withdrawn money for a given account within a specified period.
+     *
+     * @param accountId  The ID of the account.
+     * @param dateStart  The start date of the period.
+     * @param dateEnd    The end date of the period.
+     * @return The total withdrawn money for the account within the specified period.
+     */
+    public static BigDecimal getWithdrawnMoneyForAccount (int accountId, Instant dateStart, Instant dateEnd) {
+        String sqlQuery = "SELECT SUM(money) AS total_expense " +
+                "FROM transactions " +
+                "WHERE (id_type = 2 OR (id_type = 3 AND id_sender = ?)) " +
+                "AND id_sender = ? " +
+                "AND date BETWEEN ? AND ?";
+
+        BigDecimal totalExpense = null;
+
         try (Connection connection = DriverManager.getConnection(url, username, password);
              PreparedStatement statement = connection.prepareStatement(sqlQuery)) {
-            statement.setInt(1, bankId);
+            statement.setInt(1, accountId);
+            statement.setInt(2, accountId);
+            statement.setTimestamp(3, Timestamp.from(dateStart));
+            statement.setTimestamp(4, Timestamp.from(dateEnd));
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                String name = resultSet.getString("name");
-                bank = new Bank(bankId, name, null);
+                totalExpense = resultSet.getBigDecimal("total_expense");
             }
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             e.printStackTrace();
         }
-        return bank;
+        return totalExpense;
     }
 
-    private static Customer getCustomerById (int id) {
-        Customer customer = null;
-        try (Connection connection = DriverManager.getConnection(url, username, password);
-             PreparedStatement statement = connection.prepareStatement("SELECT * FROM customers WHERE id = ?")) {
-            statement.setInt(1, id);
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                String name = resultSet.getString("name");
-                List<Account> accounts = new ArrayList<>();
-                customer = new Customer(id, name, accounts);
-            }
-        } catch (SQLException e) {
+    /**
+     * Helper method to create a Transaction entity from a ResultSet.
+     *
+     * @param resultSet The ResultSet containing transaction data.
+     * @return The created Transaction object.
+     */
+    private static Transaction getTransactionFromResultSet (ResultSet resultSet){
+        try {
+            // Getting transaction data from the query result
+            int id = resultSet.getInt("id");
+            Instant date = resultSet.getTimestamp("date").toInstant();
+            BigDecimal money = resultSet.getBigDecimal("money");
+            int typeId = resultSet.getInt("id_type");
+            String typeName = resultSet.getString("name");
+            TransactionType type = new TransactionType(typeId, typeName);
+            int senderId = resultSet.getInt("id_sender");
+            int recipientId = resultSet.getInt("id_recipient");
+
+            // Getting the sender's and recipient's account
+            Account accountSender = AccountRepository.read(senderId);
+            Account accountRecipient = AccountRepository.read(recipientId);
+
+
+            return new Transaction(id, type, date, accountSender, accountRecipient, money);
+        }
+        catch (SQLException e){
             e.printStackTrace();
         }
-        return customer;
+        return null;
     }
-
 }

@@ -16,7 +16,16 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+/**
+ * This class represents a Statement and provides methods to create transaction checks, reports, and money reports.
+ */
 public class Statement {
+
+    /**
+     * Creates a transaction check to console and save it as pdf file for the given transaction.
+     *
+     * @param transaction The transaction for which the check is created.
+     */
     public static void createTransactionCheck(Transaction transaction) {
         String transactionId = String.valueOf(transaction.getId());
         String date = getStringDate(transaction.getDate(), 1);
@@ -66,12 +75,20 @@ public class Statement {
         System.out.println("Чек сохранён");
     }
 
+    /**
+     * Creates a report to console and save it as pdf file
+     * for the given account within the specified date range.
+     *
+     * @param account    The account for which the report is created.
+     * @param dateStart  The start date of the report.
+     * @param dateEnd    The end date of the report.
+     */
     public static void createReport(Account account, Instant dateStart, Instant dateEnd){
         String currency = account.getCurrency();
 
         // transactions list
         StringBuilder transactionLines = new StringBuilder();
-        List<Transaction> transactions = TransactionRepository.readTransactionsPeriod(account.getId(), dateStart, dateEnd);
+        List<Transaction> transactions = TransactionRepository.readPeriodTransactionsOfAccount(account.getId(), dateStart, dateEnd);
         for (Transaction transaction : transactions) {
             String transactionDate = getStringDate(transaction.getDate(), 3);
             String note;
@@ -116,12 +133,20 @@ public class Statement {
         System.out.println("Выписка сохранена");
     }
 
+    /**
+     * Creates a money report to console and save it as pdf file
+     * for the given account within the specified date range.
+     *
+     * @param account    The account for which the money report is created.
+     * @param dateStart  The start date of the money report.
+     * @param dateEnd    The end date of the money report.
+     */
     public static void createMoneyReport(Account account, Instant dateStart, Instant dateEnd){
         String currency = account.getCurrency();
 
         // moneyResult
-        BigDecimal moneyReceived = TransactionRepository.getReceivedForAccount(account.getId(), dateStart, dateEnd);
-        BigDecimal moneyWithdrawn = TransactionRepository.getWithdrawnForAccount(account.getId(), dateStart, dateEnd);
+        BigDecimal moneyReceived = TransactionRepository.getReceivedMoneyForAccount(account.getId(), dateStart, dateEnd);
+        BigDecimal moneyWithdrawn = TransactionRepository.getWithdrawnMoneyForAccount(account.getId(), dateStart, dateEnd);
         String moneyReceivedLine = moneyReceived + " " + currency;
         String moneyWithdrawnLine = "-" + moneyWithdrawn + currency;
         String moneyHeader = " ".repeat(14) + "Приход" + " " + "|" + " Уход\n";
@@ -140,6 +165,12 @@ public class Statement {
         System.out.println("Выписка сохранена");
     }
 
+    /**
+     * Converts the given content to a PDF file with the specified name.
+     *
+     * @param content The content to be converted to a PDF file.
+     * @param name    The name of the PDF file.
+     */
     public static void stringToPdfFile(String content, String name)  {
         try {
             final String FONT = "src/main/resources/assets/fonts/couriercyrps.ttf";
@@ -160,6 +191,17 @@ public class Statement {
         }
     }
 
+    /**
+     * Returns a formatted string representation of the account data set,
+     * including common information about the account,
+     * such as customer name, account number, currency, opening date,
+     * period, time of formation, and balance.
+     *
+     * @param account    The account for which the data set is created.
+     * @param dateStart  The start date of the period.
+     * @param dateEnd    The end date of the period.
+     * @return The formatted string representation of the account data set.
+     */
     private static String accountDataSet (Account account, Instant dateStart, Instant dateEnd) {
         String currency = account.getCurrency();
         String period = getStringDate(dateStart, 2) + " - " + getStringDate(dateEnd, 2);
@@ -187,6 +229,13 @@ public class Statement {
                 balanceLine;
     }
 
+    /**
+     * Returns a formatted string representation of the given instant based on the specified format.
+     *
+     * @param instant The instant to be formatted.
+     * @param format  The format of the string representation (1 for "dd-MM-yyyy", 2 for "dd.MM.yyyy").
+     * @return The formatted string representation of the instant.
+     */
     private static String getStringDate (Instant instant, int format){
         LocalDateTime dateTime = LocalDateTime.ofInstant(instant, ZoneOffset.UTC);
         DateTimeFormatter dateFormatter;
@@ -198,6 +247,13 @@ public class Statement {
         return dateTime.format(dateFormatter);
     }
 
+    /**
+     * Returns a formatted string representation of the given instant based on the specified format.
+     *
+     * @param instant The instant to be formatted.
+     * @param format  The format of the string representation (1 for "HH:mm:ss", 2 for "HH-mm-ss", 3 for "HH.mm").
+     * @return The formatted string representation of the instant.
+     */
     private static String getStringTime (Instant instant, int format) {
         LocalDateTime dateTime = LocalDateTime.ofInstant(instant, ZoneOffset.UTC);
         DateTimeFormatter timeFormatter = switch (format) {
@@ -209,6 +265,18 @@ public class Statement {
         return dateTime.format(timeFormatter);
     }
 
+    /**
+     * Returns a note for the given transaction if its type is equal to 3 and the account matches.
+     * If the transaction is a deposit to the account,
+     * the note will be "Пополнение от ← [Sender's Customer Name]".
+     * If the transaction is a transfer from the account,
+     * the note will be "Перевод средств → [Recipient's Customer Name]".
+     * If no match is found, an empty string is returned.
+     *
+     * @param transaction The transaction to check.
+     * @param account     The account to match against.
+     * @return The note for the transaction, or an empty string if no match is found.
+     */
     private static String getNoteIfTransactionEqualsTree(Transaction transaction, Account account) {
         if (transaction.getAccountRecipient().getId() == account.getId()) {
             return "Пополнение от ← " + transaction.getAccountSender().getCustomer().getName();
@@ -218,6 +286,12 @@ public class Statement {
         return "";
     }
 
+    /**
+     * Creates a new directory at the specified path.
+     *
+     * @param path The path of the directory to create.
+     * @return 1 if the directory was created successfully, 0 if it already exists, -1 if an error occurred.
+     */
     private static int createNewDirectory (String path){
         File directory = new File(path);
 

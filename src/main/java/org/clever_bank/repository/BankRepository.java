@@ -12,11 +12,32 @@ import java.util.List;
 
 public class BankRepository {
 
+    /**
+     * Application configuration.
+     * This class reads the configuration from the 'application.yml' file located in the resources' directory.
+     */
     private static final AppConfig appConfig = new AppConfig();
+
+    /**
+     * URL for connecting to the database.
+     */
     private static final String url = appConfig.getFullUrl();
+
+    /**
+     * Username for connecting to the database.
+     */
     private static final String username = appConfig.getUsername();
+
+    /**
+     * Username for connecting to the database.
+     */
     private static final String password = appConfig.getPassword();
 
+    /**
+     * Creates a new bank in the database.
+     *
+     * @param bank The bank entity to be created.
+     */
     public static void create (Bank bank) {
         try (Connection connection = DriverManager.getConnection(url, username, password);
              PreparedStatement statement = connection.prepareStatement("INSERT INTO banks (name) values (?)")) {
@@ -28,6 +49,12 @@ public class BankRepository {
         }
     }
 
+    /**
+     * Retrieves a bank from the database based on the bank ID.
+     *
+     * @param bankId The ID of the bank to retrieve.
+     * @return The bank entity if found, null otherwise.
+     */
     public static Bank read(int bankId) {
         Bank bank = null;
         String sqlQuery = "SELECT * FROM banks WHERE id = ?";
@@ -47,6 +74,11 @@ public class BankRepository {
         return bank;
     }
 
+    /**
+     * Retrieves all banks from the database.
+     *
+     * @return A list of all bank entities.
+     */
     public static List<Bank> readAll() {
         List<Bank> bankDTOList = new ArrayList<>();
 
@@ -68,6 +100,12 @@ public class BankRepository {
         return bankDTOList;
     }
 
+    /**
+     * Retrieves a bank from the database based on the bank name.
+     *
+     * @param name The name of the bank to retrieve.
+     * @return The bank entity if found, null otherwise.
+     */
     public static Bank readByName(String name) {
         Bank bank = null;
         try (Connection connection = DriverManager.getConnection(url, username, password);
@@ -85,6 +123,11 @@ public class BankRepository {
         return bank;
     }
 
+    /**
+     * Updates a bank in the database.
+     *
+     * @param bank The bank entity to be updated.
+     */
     public static void update (Bank bank) {
         try (Connection connection = DriverManager.getConnection(url, username, password);
              PreparedStatement statement = connection.prepareStatement("UPDATE banks SET name = ? WHERE id = ?")) {
@@ -117,6 +160,11 @@ public class BankRepository {
 
     }
 
+    /**
+     * Deletes a bank from the database based on the bank ID.
+     *
+     * @param bankId The ID of the bank to delete.
+     */
     public static void deleteBank (int bankId) {
         try (Connection connection = DriverManager.getConnection(url, username, password);
              PreparedStatement statement = connection.prepareStatement("DELETE FROM banks WHERE id = ?")) {
@@ -129,6 +177,12 @@ public class BankRepository {
         }
     }
 
+    /**
+     * Retrieves a list of accounts associated with a bank.
+     *
+     * @param bankId The ID of the bank.
+     * @return A list of account entities associated with the bank.
+     */
     private static List<Account> getAccountsByBankId (int bankId) {
         List<Account> accounts = new ArrayList<>();
         String sqlQuery = "SELECT * FROM accounts WHERE id_bank = ?";
@@ -155,6 +209,12 @@ public class BankRepository {
         return accounts;
     }
 
+    /**
+     * Retrieves a customer from the database based on the customer ID.
+     *
+     * @param customerId The ID of the customer to retrieve.
+     * @return The customer entity if found, null otherwise.
+     */
     private static Customer getCustomerByCustomerId (int customerId) {
         String sqlQuery = "SELECT * FROM customers WHERE id = ?";
         try (Connection connection = DriverManager.getConnection(url, username, password);
@@ -165,7 +225,7 @@ public class BankRepository {
             if (resultSet.next()){
                 int id = resultSet.getInt("id");
                 String name = resultSet.getString("name");
-                return new Customer(id, name, new ArrayList<Account>());
+                return new Customer(id, name, new ArrayList<>());
             }
         }
         catch (SQLException e) {
